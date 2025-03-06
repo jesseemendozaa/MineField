@@ -16,11 +16,11 @@ public abstract class Publisher {
         }
     }
 
-    public void addSubscriber(Subscriber s){
+    public void subscribe(Subscriber s){
         subscribers.add(s);
     }
 
-    public void removeSubscriber(Subscriber s){
+    public void unsubscribe(Subscriber s){
         subscribers.remove(s);
     }
 }
