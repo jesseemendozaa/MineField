@@ -14,17 +14,61 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
     private JFrame frame;
     public static int FRAME_WIDTH = 500;
     public static int FRAME_HEIGHT = 300;
+    private JButton north, northEast, northWest, south, southEast, southWest, east, west;
+
 
     public AppPanel(AppFactory factory) {
 
+
+/*
+        turtleModel = new TurtleModel();
+        view = new DrawPanel(turtleModel);
+        control = new ControlPanel(turtleModel, view);
+
+        this.setLayout(new GridLayout(1, 2));
+        this.add(control);
+        this.add(view);
+
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Container cp = frame.getContentPane();
+        cp.add(this);
+        frame.setJMenuBar(this.createMenuBar());
+        frame.setTitle("Turtle Graphics");
+        frame.setSize(500, 300);
+        frame.setVisible(true);
+
+*/
         // initialize fields here
+
+        this.factory = factory;
+        this.model = factory.makeModel();
+        this.view = factory.makeView();
+
+        controlPanel = new JPanel();
+        controlPanel.setLayout(new BorderLayout());
+
+        JButton north = new JButton("North");
+        JButton northWest = new JButton ("North West");
+        JButton northEast = new JButton ("North East");
+        JButton east = new JButton("East");
+        JButton west = new JButton("West");
+        JButton south = new JButton("South");
+        JButton southWest = new JButton ("South West");
+        JButton southEast = new JButton ("South East");
+
+        this.add(controlPanel);
+        this.add(view);
 
         frame = new SafeFrame();
         Container cp = frame.getContentPane();
         cp.add(this);
         frame.setJMenuBar(createMenuBar());
-        frame.setTitle(factory.getTitle());
+        //frame.setTitle(factory.getTitle());
+        frame.setTitle("Minefield");
+        frame.setSize(500, 300);
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
+        frame.setVisible(true);
     }
 
     public void display() { frame.setVisible(true); }
@@ -49,9 +93,12 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
         JMenu fileMenu =
                 Utilities.makeMenu("File", new String[] {"New",  "Save", "SaveAs", "Open", "Quit"}, this);
         result.add(fileMenu);
+/*
+        JMenu editMenu = Utilities.makeMenu("Edit", factory.getEditCommands(), this);
+        result.add(editMenu);
+    */
 
-        JMenu editMenu =
-                Utilities.makeMenu("Edit", factory.getEditCommands(), this);
+        JMenu editMenu = Utilities.makeMenu("Edit", new String[] {"North", "North East", "North West", "South", "South East", "South West", "East", "West"}, this);
         result.add(editMenu);
 
         JMenu helpMenu =
@@ -60,6 +107,8 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
 
         return result;
     }
+
+    
 
     public void actionPerformed(ActionEvent ae) {
         try {
@@ -80,20 +129,102 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
             } else if (cmmd.equals("Quit")) {
                 Utilities.saveChanges(model);
                 System.exit(0);
-            } else if (cmmd.equals("About")) {
+            } 
+             else if (cmmd.equals("About")) {
                 Utilities.inform(factory.about());
             } else if (cmmd.equals("Help")) {
                 Utilities.inform(factory.getHelp());
-            } else { // must be from Edit menu
+            } 
+            /*
+           else if (cmmd.equals("About"))
+           { Utilities.inform("Group 9 CS 151"); }
+           else if (cmmd.equals("Help"))
+           { Utilities.inform("You can move the miner using the directional buttons and via the Edit Menu. Numbers will display how many mines are adjacent to block "); }
+           */
+          
+            else { // must be from Edit menu
                 Command command = factory.makeEditCommand(cmmd);
                 command.execute();
             }
-        } catch (Exception e) {
+            
+        }
+        
+        catch (Exception e) {
             handleException(e);
         }
     }
+
+
+    // EDIT MENU for Turtle Graphics
+
+    /*
+// Edit Menu
+        else if (cmmd.equals("North"))
+        {
+            control.TurtleMove(0, -1);
+        }
+                
+        else if (cmmd.equals("South"))
+        {
+            control.TurtleMove(0, 1);
+        }
+                
+        else if (cmmd.equals("East"))
+        {
+            control.TurtleMove(1, 0);
+        }
+                
+        else if (cmmd.equals("West"))
+        {
+            control.TurtleMove(-1, 0);
+        }
+                
+    */
 
     protected void handleException(Exception e) {
         Utilities.error(e);
     }
 }
+/*
+
+   class ControlPanel extends JPanel 
+    {
+        private TurtleModel turtleModel;
+        private DrawPanel view;
+        private JButton north, south, east, west, clear, pen, color;
+
+        public ControlPanel(TurtleModel model, DrawPanel view) 
+        {
+            this.turtleModel = model;
+            this.view = view;
+            
+            setBackground(Color.LIGHT_GRAY); // Background
+            setLayout(new GridLayout(4, 2, 40, 40));
+
+            JButton north = new JButton("North");
+            JButton east = new JButton("East");
+            JButton west = new JButton("West");
+            JButton south = new JButton("South");
+            JButton clear = new JButton("Clear");
+            JButton pen = new JButton("Pen");
+            JButton color = new JButton("Color");
+
+            // Action listener for each button
+            north.addActionListener(e -> TurtleMove(0, -1));
+            south.addActionListener(e -> TurtleMove(0, 1));
+            east.addActionListener(e -> TurtleMove(1, 0));
+            west.addActionListener(e -> TurtleMove(-1, 0));
+            clear.addActionListener(e -> view.ClearTurtle());
+            pen.addActionListener(e -> PenStatus());
+            color.addActionListener(e -> chooseColor());
+
+            add(north);
+            add(east);
+            add(west);
+            add(south);
+            add(clear);
+            add(pen);
+            add(color);
+        }
+
+        */
