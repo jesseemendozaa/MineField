@@ -1,4 +1,4 @@
-package stopLight;
+package stoplightSim2;
 
 import stoplightSim2.Stoplight;
 

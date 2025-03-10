@@ -2,7 +2,7 @@ package mvc;
 
 public class Command {
 
-    Model model;
+    protected Model model;
 
     public Command(Model model) {
         this.model = model;

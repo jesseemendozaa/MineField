@@ -14,49 +14,16 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
     private JFrame frame;
     public static int FRAME_WIDTH = 500;
     public static int FRAME_HEIGHT = 300;
-    private JButton north, northEast, northWest, south, southEast, southWest, east, west;
 
 
     public AppPanel(AppFactory factory) {
 
-
-/*
-        turtleModel = new TurtleModel();
-        view = new DrawPanel(turtleModel);
-        control = new ControlPanel(turtleModel, view);
-
-        this.setLayout(new GridLayout(1, 2));
-        this.add(control);
-        this.add(view);
-
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Container cp = frame.getContentPane();
-        cp.add(this);
-        frame.setJMenuBar(this.createMenuBar());
-        frame.setTitle("Turtle Graphics");
-        frame.setSize(500, 300);
-        frame.setVisible(true);
-
-*/
-        // initialize fields here
-
         this.factory = factory;
         this.model = factory.makeModel();
-        this.view = factory.makeView();
+        this.view = factory.makeView(model);
 
         controlPanel = new JPanel();
-        controlPanel.setLayout(new BorderLayout());
-
-        JButton north = new JButton("North");
-        JButton northWest = new JButton ("North West");
-        JButton northEast = new JButton ("North East");
-        JButton east = new JButton("East");
-        JButton west = new JButton("West");
-        JButton south = new JButton("South");
-        JButton southWest = new JButton ("South West");
-        JButton southEast = new JButton ("South East");
-
+        this.setLayout((new GridLayout(1, 2)));
         this.add(controlPanel);
         this.add(view);
 
@@ -64,9 +31,7 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
         Container cp = frame.getContentPane();
         cp.add(this);
         frame.setJMenuBar(createMenuBar());
-        //frame.setTitle(factory.getTitle());
-        frame.setTitle("Minefield");
-        frame.setSize(500, 300);
+        frame.setTitle(factory.getTitle());
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         frame.setVisible(true);
     }
@@ -79,11 +44,13 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
 
     // called by file/open and file/new
     public void setModel(Model newModel) {
-        this.model.subscribe(this);
+
+        this.model.unsubscribe(this);
+        this.model.unsubscribe(view);
         this.model = newModel;
         this.model.subscribe(this);
-        // view must also unsubscribe then resubscribe:
         view.setModel(this.model);
+        this.model.subscribe(view);
         model.changed();
     }
 
@@ -93,12 +60,8 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
         JMenu fileMenu =
                 Utilities.makeMenu("File", new String[] {"New",  "Save", "SaveAs", "Open", "Quit"}, this);
         result.add(fileMenu);
-/*
-        JMenu editMenu = Utilities.makeMenu("Edit", factory.getEditCommands(), this);
-        result.add(editMenu);
-    */
 
-        JMenu editMenu = Utilities.makeMenu("Edit", new String[] {"North", "North East", "North West", "South", "South East", "South West", "East", "West"}, this);
+        JMenu editMenu = Utilities.makeMenu("Edit", factory.getEditCommands(), this);
         result.add(editMenu);
 
         JMenu helpMenu =
@@ -113,6 +76,7 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
     public void actionPerformed(ActionEvent ae) {
         try {
             String cmmd = ae.getActionCommand();
+            Object source = ae.getSource();
 
             if (cmmd.equals("Save")) {
                 Utilities.save(model, false);
@@ -134,16 +98,9 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
                 Utilities.inform(factory.about());
             } else if (cmmd.equals("Help")) {
                 Utilities.inform(factory.getHelp());
-            } 
-            /*
-           else if (cmmd.equals("About"))
-           { Utilities.inform("Group 9 CS 151"); }
-           else if (cmmd.equals("Help"))
-           { Utilities.inform("You can move the miner using the directional buttons and via the Edit Menu. Numbers will display how many mines are adjacent to block "); }
-           */
-          
+            }
             else { // must be from Edit menu
-                Command command = factory.makeEditCommand(cmmd);
+                Command command = factory.makeEditCommand(model, cmmd, source);
                 command.execute();
             }
             
