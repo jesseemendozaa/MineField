@@ -1,7 +1,6 @@
 package stoplightSim2;
 
-import mvc.AppFactory;
-import mvc.AppPanel;
+import mvc.*;
 
 import javax.swing.*;
 

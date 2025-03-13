@@ -7,6 +7,9 @@ import mvc.View;
 
 public class MineFieldView extends View 
 {
+
+    //TODO Change patches depending on model
+
     private final JButton[][] grid;
     private final int gridSize = 20;
 
