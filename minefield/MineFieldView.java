@@ -5,12 +5,14 @@ import javax.swing.*;
 import mvc.Model;
 import mvc.View;
 
-public class MineFieldView extends View {
+public class MineFieldView extends View 
+{
     private final JButton[][] grid;
     private final int gridSize = 20;
 
     public MineFieldView(Model model) {  
-        super(model != null ? model : new Model() {
+        super(model != null ? model : new Model() 
+        {
             @Override
             public void changed() {}
         });
