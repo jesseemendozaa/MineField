@@ -4,27 +4,28 @@ import java.awt.*;
 import javax.swing.*;
 import mvc.Model;
 import mvc.View;
+import stoplightSim2.StopLightShape;
+import stoplightSim2.Stoplight;
 
 public class MineFieldView extends View 
 {
 
     //TODO Change patches depending on model
 
-    private final JButton[][] grid;
-    private final int gridSize = 20;
+    private JLabel[][] grid;
+    private MineField model;
 
-    public MineFieldView(Model model) {  
-        super(model != null ? model : new Model() 
-        {
-            @Override
-            public void changed() {}
-        });
+    public MineFieldView(Model m) {
+        super(m);
 
-        setLayout(new GridLayout(gridSize, gridSize));
-        grid = new JButton[gridSize][gridSize];
+        this.model = (MineField)m;
 
-        for (int row = 0; row < gridSize; row++)
-            for (int col = 0; col < gridSize; col++)
-                add(grid[row][col] = new JButton("?"));
+        setLayout(new GridLayout(MineField.world_size, MineField.world_size));
+        grid = new JLabel[MineField.world_size][MineField.world_size];
+
+        for (int row = 0; row < MineField.world_size; row++)
+            for (int col = 0; col < MineField.world_size; col++)
+                add(grid[row][col] = new JLabel(model.getMap()[row][col].getDisplay()));
     }
+
 }
