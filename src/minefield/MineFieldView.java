@@ -4,28 +4,66 @@ import java.awt.*;
 import javax.swing.*;
 import mvc.Model;
 import mvc.View;
-import stoplightSim2.StopLightShape;
-import stoplightSim2.Stoplight;
 
 public class MineFieldView extends View 
 {
-
     //TODO Change patches depending on model
 
     private JLabel[][] grid;
     private MineField model;
+    private Timer refreshTimer;
 
-    public MineFieldView(Model m) {
+    public MineFieldView(Model m) 
+    {
         super(m);
-
-        this.model = (MineField)m;
+        this.model = (MineField) m;
 
         setLayout(new GridLayout(MineField.world_size, MineField.world_size));
         grid = new JLabel[MineField.world_size][MineField.world_size];
 
-        for (int row = 0; row < MineField.world_size; row++)
-            for (int col = 0; col < MineField.world_size; col++)
-                add(grid[row][col] = new JLabel(model.getMap()[row][col].getDisplay()));
+        for (int row = 0; row < MineField.world_size; row++) 
+        {
+            for (int col = 0; col < MineField.world_size; col++) 
+            {
+                grid[row][col] = new JLabel(model.getMap()[row][col].getDisplay());
+                grid[row][col].setOpaque(true);
+                grid[row][col].setBackground(Color.LIGHT_GRAY);
+                grid[row][col].setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+                add(grid[row][col]);
+            }
+        }
+
+        // Refresh gui
+        refreshTimer = new Timer(100, e -> updateView()); // Runs every 100ms
+        refreshTimer.start();
     }
 
+    public void updateView() 
+    {
+        for (int row = 0; row < MineField.world_size; row++) 
+        {
+            for (int col = 0; col < MineField.world_size; col++) 
+            {
+                grid[row][col].setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+                grid[row][col].setText(model.getMap()[row][col].getDisplay()); // Update
+            }
+        }
+
+        // White Border Path
+        for (MineField.Patch i : model.getPath()) 
+        {
+            grid[i.getX()][i.getY()].setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        }
+
+        // Black Border 
+        MineField.Patch location = model.getLocation();
+        grid[location.getX()][location.getY()].setBorder(BorderFactory.createLineBorder(Color.BLACK, 3));
+
+        // Green Border (Goal)
+        MineField.Patch goal = model.getGoal();
+        grid[goal.getX()][goal.getY()].setBorder(BorderFactory.createLineBorder(Color.GREEN, 3));
+
+        revalidate();
+        repaint();
+    }
 }
