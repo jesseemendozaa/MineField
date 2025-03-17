@@ -50,7 +50,7 @@ public class MineField extends Model implements Serializable{
     }
 
     public static Integer world_size = 20;
-    private static Integer percentMined = 0;
+    private static Integer percentMined = 20;
 
     private boolean isMined;
     private boolean isOver;
@@ -83,8 +83,15 @@ public class MineField extends Model implements Serializable{
         }
 
         location = map[0][0];
+        map[0][0].isMined = false;
+        int numMined = 0;
+        if (map[1][0].isMined){numMined++;}
+        if (map[1][1].isMined){numMined++;}
+        if (map[0][1].isMined){numMined++;}
+        map[0][0].display = String.valueOf(numMined);
         path.add(location);
         goal = map[world_size-1][world_size-1];
+        changed();
     }
 
     public ArrayList<Patch> getPath(){
@@ -142,58 +149,111 @@ public class MineField extends Model implements Serializable{
             }
             int numMined = 0;
             try {
-                if (map[newX-1][newY-1].isMined){numMined++;}
-                if (map[newX][newY-1].isMined){numMined++;}
-                if (map[newX+1][newY-1].isMined){numMined++;}
-                if (map[newX+1][newY].isMined){numMined++;}
-                if (map[newX+1][newY+1].isMined){numMined++;}
-                if (map[newX][newY+1].isMined){numMined++;}
-                if (map[newX-1][newY+1].isMined){numMined++;}
-                if (map[newX-1][newY].isMined){numMined++;}
+
+                if (newX - 1 >= minX){
+                    if (map[newX-1][newY].isMined){numMined++;}
+                    if (newY - 1 >= minY){
+                        if (map[newX-1][newY - 1].isMined){numMined++;}
+                        if (map[newX][newY - 1].isMined){numMined++;}
+                    }
+                    if (newY + 1 <= maxY){
+                        if (map[newX-1][newY + 1].isMined){numMined++;}
+                        if (map[newX][newY + 1].isMined){numMined++;}
+                    }
+                }
+                if (newX + 1 <= maxX){
+                    if (map[newX+1][newY].isMined){numMined++;}
+                    if (newY - 1 >= minY){
+                        if (map[newX+1][newY - 1].isMined){numMined++;}
+                    }
+                    if (newY + 1 <= maxY){
+                        if (map[newX+1][newY + 1].isMined){numMined++;}
+                    }
+                }
             }
             catch (Exception e){}
             location.setDisplay(String.valueOf(numMined));
         }
     }
 
-    public void moveSouth() throws Exception{
+    public void moveEast() throws Exception{
         int currX = location.getX();
         int currY = location.getY();
         int newX = currX + 0;
         int newY = currY + 1;
 
         checkValid(newX, newY);
-
+        changed();
     }
 
-    public void moveNorth() throws Exception{
+    public void moveWest() throws Exception{
         int currX = location.getX();
         int currY = location.getY();
         int newX = currX + 0;
         int newY = currY - 1;
 
         checkValid(newX, newY);
-
+        changed();
     }
 
-    public void moveEast() throws Exception{
+    public void moveSouth() throws Exception{
         int currX = location.getX();
         int currY = location.getY();
         int newX = currX + 1;
         int newY = currY + 0;
 
         checkValid(newX, newY);
-
+        changed();
     }
 
-    public void moveWest() throws Exception{
+    public void moveNorth() throws Exception{
         int currX = location.getX();
         int currY = location.getY();
         int newX = currX - 1;
         int newY = currY + 0;
 
         checkValid(newX, newY);
+        changed();
+    }
 
+    public void moveNortheast() throws Exception{
+        int currX = location.getX();
+        int currY = location.getY();
+        int newX = currX - 1;
+        int newY = currY + 1;
+
+        checkValid(newX, newY);
+        changed();
+    }
+
+    public void moveNorthwest() throws Exception{
+        int currX = location.getX();
+        int currY = location.getY();
+        int newX = currX - 1;
+        int newY = currY - 1;
+
+        checkValid(newX, newY);
+        changed();
+    }
+
+    public void moveSoutheast() throws Exception{
+        int currX = location.getX();
+        int currY = location.getY();
+        int newX = currX + 1;
+        int newY = currY + 1;
+
+        checkValid(newX, newY);
+        changed();
+    }
+
+    public void moveSouthwest() throws Exception{
+        int currX = location.getX();
+        int currY = location.getY();
+        int newX = currX + 1;
+        int newY = currY - 1;
+
+        checkValid(newX, newY);
+        changed();
     }
 
 }

@@ -6,12 +6,10 @@ import mvc.*;
 
 public class MineFieldAppPanel extends AppPanel
 {
-    private MineFieldView view;
 
     public MineFieldAppPanel(AppFactory factory) 
     {
         super(factory);
-
         String[] dir = factory.getEditCommands();
 
         controlPanel.setLayout(new GridLayout(4,2));

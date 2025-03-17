@@ -30,6 +30,18 @@ public class MoveCommand extends Command {
                 case "West":
                     model.moveWest();
                     break;
+                case "Northeast":
+                    model.moveNortheast();
+                    break;
+                case "Northwest":
+                    model.moveNorthwest();
+                    break;
+                case "Southeast":
+                    model.moveSoutheast();
+                    break;
+                case "Southwest":
+                    model.moveSouthwest();
+                    break;
             }
         } catch (Exception e) {
             Utilities.error(e);

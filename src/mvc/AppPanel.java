@@ -50,8 +50,7 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
         this.model = newModel;
         this.model.subscribe(this);
         view.setModel(this.model);
-        this.model.subscribe(view);
-        model.changed();
+        this.model.changed();
     }
 
     protected JMenuBar createMenuBar() {

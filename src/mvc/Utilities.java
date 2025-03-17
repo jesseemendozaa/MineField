@@ -52,7 +52,7 @@ public class Utilities {
 
     // asks user to save changes
    public static void saveChanges(Model model) {
-        if (model.getUnsavedChanges() && mvc.Utilities.confirm("current model has unsaved changes, continue?")) {
+        if (model.getUnsavedChanges() && mvc.Utilities.confirm("current model has unsaved changes, do you want to save changes?")) {
             mvc.Utilities.save(model, false);
         }
     }
