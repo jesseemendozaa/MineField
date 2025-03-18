@@ -12,7 +12,7 @@ public class MineFieldFactory implements AppFactory{
     }
 
     public String[] getEditCommands() {
-        return new String[] {"North", "South", "East", "West", "Northwest", "Southwest", "Northeast", "Southeast"};
+        return new String[] {"North", "East", "West", "South", "Northwest", "Northeast", "Southwest", "Southeast"};
     }
 
     // source added 3/15 to support text fields

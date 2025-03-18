@@ -20,6 +20,7 @@ public class AppPanel extends JPanel implements Subscriber, ActionListener  {
 
         this.factory = factory;
         this.model = factory.makeModel();
+        this.model.setUnsavedChanges(false);
         this.view = factory.makeView(model);
 
         controlPanel = new JPanel();
