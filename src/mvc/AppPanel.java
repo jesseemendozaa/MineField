@@ -5,7 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 // AppPanel is the MVC controller
-public class AppPanel extends JPanel implements Subscriber, ActionListener  {
+public abstract class AppPanel extends JPanel implements Subscriber, ActionListener  {
 
     protected Model model;
     protected AppFactory factory;

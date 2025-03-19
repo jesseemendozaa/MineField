@@ -15,7 +15,7 @@ public class MoveCommand extends Command {
         this.source = source;
     }
 
-    public void execute() {
+    public void execute() throws Exception{
         try {
             switch (type) {
                 case "South":

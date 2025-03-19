@@ -165,9 +165,11 @@ public class MineField extends Model implements Serializable{
                     if (map[newX+1][newY].isMined){numMined++;}
                     if (newY - 1 >= minY){
                         if (map[newX+1][newY - 1].isMined){numMined++;}
+                        if (!(newX - 1 >= minX) && (map[newX][newY - 1].isMined)){numMined++;}
                     }
                     if (newY + 1 <= maxY){
                         if (map[newX+1][newY + 1].isMined){numMined++;}
+                        if (!(newX - 1 >= minX) &&(map[newX][newY + 1].isMined)){numMined++;}
                     }
                 }
             }

@@ -1,6 +1,6 @@
 package mvc;
 
-public class Command {
+public abstract class Command {
 
     protected Model model;
 
@@ -8,9 +8,7 @@ public class Command {
         this.model = model;
     }
 
-    public void execute(){
-
-    }
+    public void execute() throws Exception {}
 
 
 
